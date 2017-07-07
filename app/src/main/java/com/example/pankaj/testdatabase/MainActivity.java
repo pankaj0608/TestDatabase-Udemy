@@ -11,6 +11,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,19 +81,39 @@ public class MainActivity extends AppCompatActivity {
 
     private void manageDatabase() {
 
+        List<String> contacts = new ArrayList<>();
+
         ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
-                new String[]{ContactsContract.Contacts.DISPLAY_NAME},
-                null, null, null);
+        Cursor cursor = null;
+        try {
+            cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
+                    new String[]{ContactsContract.Contacts.DISPLAY_NAME},
+                    null, null, null);
 
-        System.out.println("cursor.getCount() : " + cursor.getCount());
+            System.out.println("cursor.getCount() : " + cursor.getCount());
 
-        int counter = 0;
-        while (cursor.moveToNext()) {
-            System.out.println("cursor.getString() : " + cursor.getString(0));
+            int counter = 0;
+            while (cursor.moveToNext()) {
+                System.out.println("cursor.getString() : " + cursor.getString(0));
+                contacts.add(cursor.getString(0));
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
 
-        cursor.close();
+        ListView contactList = (ListView) findViewById(R.id.contact_list);
+
+        ArrayAdapter<String> arrayAdapter
+                = new ArrayAdapter<String>(
+                getBaseContext(),
+                R.layout.contact_detail,
+                R.id.name,
+                contacts);
+
+        contactList.setAdapter(arrayAdapter);
     }
 
     @Override
