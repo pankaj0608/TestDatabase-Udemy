@@ -25,12 +25,11 @@ public class MainActivity extends AppCompatActivity {
         //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
 
         int permissionCheck = ContextCompat.checkSelfPermission(this,
-                                    Manifest.permission.READ_CONTACTS);
+                Manifest.permission.READ_CONTACTS);
 
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.READ_CONTACTS},
                 MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-
 
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,17 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    ContentResolver contentResolver = getContentResolver();
-                    Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
-                            new String[]{ContactsContract.Contacts.DISPLAY_NAME},
-                            null, null, null);
-
-                    System.out.println("cursor.getCount() : " + cursor.getCount());
-
-                    int counter = 0;
-                    while(cursor.moveToNext()) {
-                        System.out.println("cursor.getString() : " + cursor.getString(counter++));
-                    }
+                    manageDatabase();
 
                 } else {
 
@@ -83,6 +72,23 @@ public class MainActivity extends AppCompatActivity {
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    private void manageDatabase() {
+
+        ContentResolver contentResolver = getContentResolver();
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,
+                new String[]{ContactsContract.Contacts.DISPLAY_NAME},
+                null, null, null);
+
+        System.out.println("cursor.getCount() : " + cursor.getCount());
+
+        int counter = 0;
+        while (cursor.moveToNext()) {
+            System.out.println("cursor.getString() : " + cursor.getString(0));
+        }
+
+        cursor.close();
     }
 
     @Override
