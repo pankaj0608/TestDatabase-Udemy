@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    manageDatabase();
+                    manageDatabaseUsingResolver();
 
                 } else {
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void manageDatabase() {
+    private void manageDatabaseUsingResolver() {
 
         List<String> contacts = new ArrayList<>();
 
